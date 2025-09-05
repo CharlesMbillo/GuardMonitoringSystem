@@ -53,11 +53,11 @@ export interface IStorage {
   createAuditLog(log: InsertAuditLog): Promise<AuditLog>;
   getAuditLogs(limit?: number): Promise<AuditLog[]>;
   
-  sessionStore: session.SessionStore;
+  sessionStore: any;
 }
 
 export class DatabaseStorage implements IStorage {
-  sessionStore: session.SessionStore;
+  sessionStore: any;
 
   constructor() {
     this.sessionStore = new PostgresSessionStore({ 

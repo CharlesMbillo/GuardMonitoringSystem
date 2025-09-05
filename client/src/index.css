@@ -108,6 +108,9 @@
   }
 }
 
+/* Font face definitions for Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 /* Custom biometric scanner animations */
 .biometric-animation {
   animation: biometric-pulse 2s infinite;
@@ -141,9 +144,6 @@
     opacity: 0.5;
   }
 }
-
-/* Font face definitions for Inter */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* Ensure proper font loading */
 .font-inter {

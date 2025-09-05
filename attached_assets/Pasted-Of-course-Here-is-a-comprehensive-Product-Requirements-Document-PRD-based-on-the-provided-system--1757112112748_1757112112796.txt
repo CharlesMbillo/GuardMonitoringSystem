@@ -1,0 +1,132 @@
+Of course. Here is a comprehensive Product Requirements Document (PRD) based on the provided system specification and appendices.
+
+---
+
+## **Product Requirements Document (PRD): Guard Monitoring System (GMS)**
+
+**Version:** 1.0
+**Date:** May 23, 2024
+**Author:** [Your Name/Product Team]
+**Status:** Draft for Review
+
+### **1. Introduction & Overview**
+
+**1.1. Problem Statement**
+Public and private organizations in Kenya suffer significant financial losses due to "ghost workers"—non-existent, duplicate, or proxy employees on the payroll. Traditional paper-based or simple digital attendance systems are prone to fraud and manipulation, leading to wage leakage, audit failures, and a lack of accountability for public funds.
+
+**1.2. Product Vision**
+The Guard Monitoring System (GMS) is a secure, compliant, and cost-effective solution designed to eliminate ghost workers by biometrically and geospatially verifying that a scheduled guard is physically present at their post before they can be paid. We aim to integrate seamlessly with existing payroll systems, providing an immutable audit trail from attendance to disbursement.
+
+**1.3. Goals & Objectives**
+*   **Primary Goal:** Eliminate ghost, duplicate, and proxy workers from the payroll.
+*   **Compliance:** Achieve and maintain full compliance with Kenya’s Data Protection Act (2019).
+*   **Efficiency:** Reduce manual payroll reconciliation efforts by ≥ 80%.
+*   **ROI:** Achieve a ≥ 15% reduction in wage bill leakage for clients within the first year of operation.
+*   **User Adoption:** Achieve a ≥ 95% successful biometric clock-in rate from guards.
+
+### **2. User Stories & Features**
+
+**Epic 1: Guard Attendance & Identity Verification**
+*   **Feature:** Biometric Clock-in/out
+    *   **US-G1:** As a guard, I can clock in/out using my fingerprint so my attendance is recorded securely and reliably.
+    *   **US-G2:** As a guard with a worn fingerprint, I can use facial recognition as a fallback to clock in.
+*   **Feature:** Offline-First Operation
+    *   **US-G3:** As a guard in a location with poor connectivity, I can clock in/out and have my data sync automatically later.
+
+**Epic 2: Supervision & Real-Time Monitoring**
+*   **Feature:** Live Roster Dashboard
+    *   **US-S1:** As a supervisor, I can see a live view of who is on post, late, or absent to manage my site effectively.
+*   **Feature:** Exception Handling
+    *   **US-S2:** As a supervisor, I receive alerts for anomalies (e.g., failed liveness) and can provide attestation for HR.
+
+**Epic 3: HR & Payroll Management**
+*   **Feature:** Rostering & Scheduling
+    *   **US-HR1:** As an HR officer, I can create and manage guard shifts and assignments across multiple sites.
+*   **Feature:** Payroll Gating & Export
+    *   **US-HR2:** As a payroll officer, I can export a payroll file that automatically excludes any hours not backed by verified attendance.
+
+**Epic 4: Compliance & Administration**
+*   **Feature:** DPO Console
+    *   **US-DPO1:** As the DPO, I can process data subject access and erasure requests from a dedicated dashboard.
+*   **Feature:** Audit Portal
+    *   **US-A1:** As an auditor, I can download a complete, tamper-evident evidence pack for any pay period.
+
+### **3. Functional Requirements**
+
+| ID | Requirement | Description | User Story | Priority |
+| :--- | :--- | :--- | :--- | :--- |
+| **FR1** | Biometric Authentication | System must allow clock-in/out via fingerprint (primary) or on-device facial recognition (fallback). Match score must be ≥85%. | US-G1, US-G2 | Must Have |
+| **FR2** | Geofencing & Time Binding | Clock-in is only successful if the device is within a pre-defined GPS geofence (e.g., 100m radius of post) and within 15 mins of the scheduled shift time. | US-G1 | Must Have |
+| **FR3** | Offline Mode | The mobile app must cache attendance events locally and sync them to the server when connectivity is restored. | US-G3 | Must Have |
+| **FR4** | Live Supervisor Dashboard | Web-based dashboard showing real-time attendance status (On-Post, Late, Absent) for all guards at a site. | US-S1 | Must Have |
+| **FR5** | Anomaly Detection | System automatically flags events for: duplicate biometric use, temporal overlaps, and geofence violations. | US-S2 | Must Have |
+| **FR6** | Payroll Gating | The payroll export function must only include shifts with a verified clock-in and clock-out event. Shifts with unresolved exceptions are excluded. | US-HR2 | Must Have |
+| **FR7** | Immutable Audit Trail | All system actions (clock-in, export, attestation) are logged in an append-only ledger with user, timestamp, and action details. | US-A1 | Must Have |
+| **FR8** | Data Subject Request Portal | A console for the DPO to search for a user, view their data, and process access/erasure requests. | US-DPO1 | Should Have |
+
+### **4. Non-Functional Requirements**
+
+| ID | Requirement Category | Specification |
+| :--- | :--- | :--- |
+| **NFR1** | **Performance** | The mobile app must respond to a clock-in action in < 2 seconds. The admin dashboard must load in < 3 seconds. |
+| **NFR2** | **Availability** | The backend API must achieve 99.5% uptime. The mobile app must function offline for ≥ 24 hours. |
+| **NFR3** | **Security** | All PII and biometric data must be encrypted in transit (TLS 1.2+) and at rest (AES-256). Biometric templates must be stored in a secure, encrypted vault. |
+| **NFR4** | **Privacy & Compliance** | The system must be designed per Data Protection Act guidelines: data minimisation, purpose limitation, and ability to honour data subject rights. |
+| **NFR5** | **Usability** | The guard mobile app must be usable by individuals with low technical literacy. Critical actions must have clear visual feedback. |
+
+### **5. System Architecture & Design (Overview)**
+
+*   **Mobile App (Frontend):** Native Android app (Kotlin) for guards and supervisors. Offline-first design.
+*   **Web Portal (Frontend):** React.js-based responsive web application for HR, Payroll, DPO, and Auditors.
+*   **Backend:** Node.js with Express.js framework. RESTful API design.
+*   **Database:** PostgreSQL for relational data (users, shifts, events). Amazon S3 or equivalent for storing audit artifacts.
+*   **Biometric Processing:** On-device SDK for fingerprint and facial matching. No raw biometric images are sent to the server; only encrypted match scores/templates.
+*   **Infrastructure:** Hosted on a cloud provider (AWS/Azure) with servers preferably located in Kenya for data residency.
+
+### **6. Compliance Requirements**
+
+1.  **ODPC Registration:** Must be registered as a Data Controller with the ODPC before launch.
+2.  **Lawful Basis:** Legal basis for processing (performance of contract & legitimate interest) must be documented and stated in the HR privacy notice.
+3.  **DPIA:** A Data Protection Impact Assessment must be conducted and filed prior to processing.
+4.  **Data Retention:** Attendance logs will be retained for 3 years for audit purposes. Biometric data will be deleted upon termination of employment, in accordance with a defined retention policy.
+5.  **International Transfer:** No transfer of personal data outside Kenya unless to a jurisdiction with adequate safeguards and prior ODPC approval.
+
+### **7. Key Performance Indicators (KPIs) & Success Metrics**
+
+*   **% Payroll Gated:** Percentage of total payroll disbursement that is backed by a verified attendance record. (Target: 100%)
+*   **Ghost Records Detected:** Number of fraudulent attendance events blocked per month.
+*   **False Rejection Rate (FRR):** Percentage of legitimate clock-in attempts failed by the system. (Target: < 2%)
+*   **Exception Resolution Time:** Mean time from an exception being flagged to it being resolved by HR/supervisor. (Target: < 4 hours)
+*   **User Satisfaction Score:** Measured via quarterly NPS surveys for Guards and Supervisors.
+
+### **8. Out-of-Scope**
+
+*   Development of custom biometric hardware.
+*   Direct integration with core banking systems.
+*   Full-featured HRIS or Access Control System (will integrate with existing ones).
+*   Real-time facial recognition from CCTV feeds.
+
+### **9. Open Questions & Assumptions**
+
+*   **Assumption:** Guards and supervisors will have access to Android smartphones.
+*   **Assumption:** Client will appoint a Data Protection Officer (DPO).
+*   **Open Question:** What is the specific file format required for the client's IPPD/ERP system?
+*   **Open Question:** Who is responsible for providing and maintaining the 4G data packages for the devices?
+
+### **10. Appendix**
+
+*   **A:** Detailed User Stories & Acceptance Criteria
+*   **B:** Risk Register
+*   **C:** High-Level Budget Estimate
+*   **D:** UI Mockups & Wireframes (Link)
+*   **E:** Data Model Schema (Link)
+
+---
+**Approvals:**
+
+| Role | Name | Signature | Date |
+| :--- | :--- | :--- | :--- |
+| Product Manager | | | |
+| Head of Engineering | | | |
+| Chief Data Protection Officer | | | |
+| Client Representative | | | |
